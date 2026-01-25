@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import donations from "@/data/donations.json";
+import { donations } from "@/data/donations";
 import { DonationsDataTable } from "./_components/donations-data-table";
 import { CreateDonationDialog } from "./_components/add-donation-dialog";
 
