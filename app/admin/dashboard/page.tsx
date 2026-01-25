@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import donations from "@/data/donations";
+import { donations } from "@/data/donations";
 import { volunteers } from "@/data/volunteers";
 
 const cardItems: CardItem[] = [
