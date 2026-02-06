@@ -28,22 +28,22 @@ export function DatePicker({
         render={
           <Button
             variant={"outline"}
-            id="date"
+            id='date'
             disabled={disabled}
-            className="w-full justify-between font-normal"
+            className='w-full justify-between font-normal'
           >
             {value ? (
               value.toLocaleDateString()
             ) : (
-              <span className="text-muted-foreground">{placeholder}</span>
+              <span className='text-muted-foreground'>{placeholder}</span>
             )}
             <IconCalendar />
           </Button>
         }
       />
       <PopoverContent
-        className="w-full overflow-hidden p-0"
-        align="center"
+        className='w-full overflow-hidden p-0'
+        align='center'
         side={"bottom"}
       >
         <Calendar
@@ -67,12 +67,9 @@ export function DatePicker({
             onChange(safeDate);
             setIsOpen(false);
           }}
-          disabled={{
-            before: new Date(),
-          }}
           captionLayout={"dropdown-months"}
           footer={
-            <h4 className="pt-4 text-sm font-extralight text-muted-foreground">
+            <h4 className='text-muted-foreground pt-4 text-sm font-extralight'>
               {value
                 ? `Deadline will be set at: ${value.toDateString()}`
                 : placeholder}

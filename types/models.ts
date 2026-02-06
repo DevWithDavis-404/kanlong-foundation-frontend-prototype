@@ -7,15 +7,17 @@ export type User = {
   phone: string;
   status?: string;
   avatar?: string;
+  donor_address_line_1: string;
+  donor_address_line_2: string;
   created_at: string;
 };
 
 export type Donation = {
   id: number;
   donor: User;
-  amount: string;
-  payment_method: string;
-  date_donated: string;
+  amount: number;
+  payment_method: "GCash" | "Maya" | "GOtyme" | "BDO" | "BPI" | "Other";
+  date_donated: Date;
 };
 
 export type Volunteer = {

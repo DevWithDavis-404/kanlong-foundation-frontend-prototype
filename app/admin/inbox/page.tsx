@@ -73,7 +73,8 @@ export default function AdminInboxPage() {
                     <ItemContent>
                       <ItemTitle>{message.subject}</ItemTitle>
                       <ItemDescription>
-                        {message.date_submitted}
+                        {new Date(message.date_submitted).toLocaleDateString()}{" "}
+                        {new Date(message.date_submitted).toLocaleTimeString()}
                       </ItemDescription>
                     </ItemContent>
                     <ItemActions>
@@ -95,7 +96,8 @@ export default function AdminInboxPage() {
                     <ItemContent>
                       <ItemTitle>{message.subject}</ItemTitle>
                       <ItemDescription>
-                        {message.date_submitted}
+                        {new Date(message.date_submitted).toLocaleDateString()}{" "}
+                        {new Date(message.date_submitted).toLocaleTimeString()}
                       </ItemDescription>
                     </ItemContent>
                     <ItemActions>
@@ -108,16 +110,16 @@ export default function AdminInboxPage() {
           <TabsContent value={"starred"}>
             {/* Empty State */}
             <EmptyState
-              title="No Starred Mail"
-              description="Star messages to keep important conversations easy to find. Click the star icon next to any message to add it here."
+              title='No Starred Mail'
+              description='Star messages to keep important conversations easy to find. Click the star icon next to any message to add it here.'
               icon={<IconStar />}
             />
           </TabsContent>
           <TabsContent value={"trash"}>
             {/* Empty State */}
             <EmptyState
-              title="No Trashed Mail"
-              description="Deleted messages will appear here. Move a message to Trash to remove it from your inbox."
+              title='No Trashed Mail'
+              description='Deleted messages will appear here. Move a message to Trash to remove it from your inbox.'
               icon={<IconTrash />}
             />
           </TabsContent>

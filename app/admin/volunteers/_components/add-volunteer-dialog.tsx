@@ -40,18 +40,31 @@ export function AddVolunteerDialog() {
   const formSchema = z.object({
     name: z.string().nonempty("Name is required"),
     email: z.string().email("Enter a valid email address"),
-    phone: z.string().nonempty("Phone is required"),
+    phone: z
+      .string()
+      .length(11, "Phone number must be exactly 11 digits")
+      .startsWith("09", "Phone number must start with '09'")
+      .nonempty("Phone number is required"),
+    address_line_1: z.string().max(256, "").optional(),
+    address_line_2: z.string().max(256, "").optional(),
     status: z.enum(["Active", "Inactive"]),
     date_registered: z.date(),
   });
 
   // React Hook Form Definition
-  const form = useForm<z.infer<typeof formSchema>>({
+  const {
+    handleSubmit,
+    reset,
+    control,
+    formState: { isSubmitting },
+  } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
       phone: "",
+      address_line_1: "",
+      address_line_2: "",
       status: "Active",
       date_registered: new Date(),
     },
@@ -61,7 +74,7 @@ export function AddVolunteerDialog() {
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
     toast.success("(Test) Volunteer added successfully");
-    form.reset();
+    reset();
     setOpen(false);
   };
   return (
@@ -78,28 +91,28 @@ export function AddVolunteerDialog() {
         <DialogHeader>
           <DialogTitle>Edit Volunteer Form</DialogTitle>
           <DialogDescription>
-            Fields with <span className="text-red-400">&#42;</span> are
+            Fields with <span className='text-red-400'>&#42;</span> are
             required.
           </DialogDescription>
         </DialogHeader>
-        <div className={"max-h-[60svh] overflow-y-auto -mx-4 px-4"}>
-          <form id="edit-volunteer-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className={"-mx-4 max-h-[60svh] overflow-y-auto px-4"}>
+          <form id='edit-volunteer-form' onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
-                name="name"
-                control={form.control}
+                name='name'
+                control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="name">
+                    <FieldLabel htmlFor='name'>
                       Name
-                      <span className="text-red-400">&#42;</span>
+                      <span className='text-red-400'>&#42;</span>
                     </FieldLabel>
                     <Input
                       {...field}
-                      id="name"
+                      id='name'
                       type={"text"}
                       aria-invalid={fieldState.invalid}
-                      disabled={form.formState.isSubmitting}
+                      disabled={isSubmitting}
                       tabIndex={1}
                       autoFocus
                     />
@@ -110,20 +123,20 @@ export function AddVolunteerDialog() {
                 )}
               />
               <Controller
-                name="email"
-                control={form.control}
+                name='email'
+                control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="email">
+                    <FieldLabel htmlFor='email'>
                       Email
-                      <span className="text-red-400">&#42;</span>
+                      <span className='text-red-400'>&#42;</span>
                     </FieldLabel>
                     <Input
                       {...field}
-                      id="email"
+                      id='email'
                       type={"email"}
                       aria-invalid={fieldState.invalid}
-                      disabled={form.formState.isSubmitting}
+                      disabled={isSubmitting}
                       tabIndex={2}
                     />
                     {fieldState.invalid && (
@@ -133,20 +146,20 @@ export function AddVolunteerDialog() {
                 )}
               />
               <Controller
-                name="phone"
-                control={form.control}
+                name='phone'
+                control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="phone">
+                    <FieldLabel htmlFor='phone'>
                       Phone
-                      <span className="text-red-400">&#42;</span>
+                      <span className='text-red-400'>&#42;</span>
                     </FieldLabel>
                     <Input
                       {...field}
-                      id="phone"
+                      id='phone'
                       type={"tel"}
                       aria-invalid={fieldState.invalid}
-                      disabled={form.formState.isSubmitting}
+                      disabled={isSubmitting}
                       maxLength={11}
                       tabIndex={3}
                     />
@@ -157,13 +170,62 @@ export function AddVolunteerDialog() {
                 )}
               />
               <Controller
-                name="status"
-                control={form.control}
+                name='address_line_1'
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    className='md:col-span-2'
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldLabel htmlFor='address_line_1'>
+                      Address Line 1
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id='address_line_1'
+                      maxLength={256}
+                      aria-invalid={fieldState.invalid}
+                      disabled={isSubmitting}
+                      tabIndex={4}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name='address_line_2'
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    className='md:col-span-2'
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldLabel htmlFor='address_line_2'>
+                      Address Line 2
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id='address_line_2'
+                      maxLength={256}
+                      aria-invalid={fieldState.invalid}
+                      tabIndex={4}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name='status'
+                control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="status">
+                    <FieldLabel htmlFor='status'>
                       Status
-                      <span className="text-red-400">&#42;</span>
+                      <span className='text-red-400'>&#42;</span>
                     </FieldLabel>
                     <Select
                       name={field.name}
@@ -171,10 +233,10 @@ export function AddVolunteerDialog() {
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
+                        <SelectValue placeholder='Select status' />
                       </SelectTrigger>
                       <SelectContent
-                        id="status"
+                        id='status'
                         aria-invalid={fieldState.invalid}
                       >
                         <SelectItem value={"Active"}>Active</SelectItem>
@@ -188,18 +250,18 @@ export function AddVolunteerDialog() {
                 )}
               />
               <Controller
-                name="date_registered"
-                control={form.control}
+                name='date_registered'
+                control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="date_registered">
+                    <FieldLabel htmlFor='date_registered'>
                       Date Registered
-                      <span className="text-red-400">&#42;</span>
+                      <span className='text-red-400'>&#42;</span>
                     </FieldLabel>
                     <DatePicker
                       value={field.value}
                       onChange={field.onChange}
-                      placeholder="Set date registered"
+                      placeholder='Set date registered'
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -208,17 +270,17 @@ export function AddVolunteerDialog() {
                 )}
               />
               <FieldSeparator />
-              <Field orientation={"horizontal"} className="justify-end">
+              <Field orientation={"horizontal"} className='justify-end'>
                 <Button
                   variant={"outline"}
                   type={"reset"}
-                  form="edit-volunteer-form"
-                  onClick={() => form.reset()}
+                  form='edit-volunteer-form'
+                  onClick={() => reset()}
                 >
                   <IconRestore />
                   Reset
                 </Button>
-                <Button type={"submit"} form="edit-volunteer-form">
+                <Button type={"submit"} form='edit-volunteer-form'>
                   <IconUserPlus />
                   Add Volunteer
                 </Button>

@@ -22,12 +22,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group";
-import {
   Select,
   SelectContent,
   SelectGroup,
@@ -35,12 +29,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IconPlus, IconRestore } from "@tabler/icons-react";
-import z from "zod/v3";
-import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { IconPlus, IconRestore } from "@tabler/icons-react";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod/v3";
 
 const paymentMethods = [
   { label: "GCash", value: "GCash" },
@@ -48,31 +42,49 @@ const paymentMethods = [
   { label: "GOtyme", value: "GOtyme" },
   { label: "BDO", value: "BDO" },
   { label: "BPI", value: "BPI" },
+  { label: "Other", value: "Other" },
 ];
 
 export function CreateDonationDialog() {
   // Dialog State
   const [open, setOpen] = useState<boolean>(false);
 
+  // Form disabled state
+  const [disabled, setDisabled] = useState<boolean>(false);
+
   // Form Schema Definition
   const formSchema = z.object({
-    donor_name: z.string().nonempty(),
-    donor_email: z.string().email(),
-    donor_phone: z.string().max(11, "").nonempty(),
-    donor_address: z.string().max(256, "").nullable(),
-    amount: z.coerce.number(),
-    payment_method: z.enum(["GCash", "Maya", "GOtyme", "BDO", "BPI"]),
+    donor_name: z.string().nonempty("Name is required"),
+    donor_email: z.string().email("Enter a valid email address"),
+    donor_phone: z
+      .string()
+      .length(11, "Phone number must be exactly 11 digits")
+      .startsWith("09", "Phone number must start with '09'")
+      .nonempty("Phone number is required"),
+    donor_address_line_1: z.string().max(256, "").optional(),
+    donor_address_line_2: z.string().max(256, "").optional(),
+    amount: z.coerce
+      .number()
+      .nonnegative("Amount should not be a negative number"),
+    payment_method: z.enum(["GCash", "Maya", "GOtyme", "BDO", "BPI", "Other"]),
     date_donated: z.date(),
   });
 
   // React Hook Form Definition
-  const form = useForm<z.infer<typeof formSchema>>({
+  const {
+    handleSubmit,
+    reset,
+    control,
+    formState: { isSubmitting },
+  } = useForm<z.infer<typeof formSchema>>({
+    disabled,
     resolver: zodResolver(formSchema),
     defaultValues: {
       donor_name: "",
       donor_email: "",
       donor_phone: "",
-      donor_address: null,
+      donor_address_line_1: "",
+      donor_address_line_2: "",
       amount: 0,
       payment_method: "GCash",
       date_donated: new Date(),
@@ -81,9 +93,11 @@ export function CreateDonationDialog() {
 
   // Submit Handler
   const onSubmit = (data: z.infer<typeof formSchema>) => {
+    setDisabled(true);
     console.log(data);
     toast.success("(Test) Donation added successfully");
-    form.reset();
+    reset();
+    setDisabled(false);
     setOpen(false);
   };
 
@@ -101,35 +115,35 @@ export function CreateDonationDialog() {
         <DialogHeader>
           <DialogTitle>Add New Donation Form</DialogTitle>
           <DialogDescription>
-            Fields with <span className="text-red-400">&#42;</span> are
+            Fields with <span className='text-red-400'>&#42;</span> are
             required.
           </DialogDescription>
         </DialogHeader>
         {/* Form */}
-        <div className={"max-h-[60svh] overflow-y-auto -mx-4 px-4"}>
-          <form id="add-donation-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className={"-mx-4 max-h-[80svh] overflow-y-auto px-4"}>
+          <form id='add-donation-form' onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <FieldSet>
                 <FieldLegend>Donor Information</FieldLegend>
                 <FieldDescription>
                   Please fill in the informations of the donor.
                 </FieldDescription>
-                <FieldGroup className="grid md:grid-cols-2">
+                <FieldGroup className='grid md:grid-cols-2'>
                   <Controller
-                    name="donor_name"
-                    control={form.control}
+                    name='donor_name'
+                    control={control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="donor_name">
+                        <FieldLabel htmlFor='donor_name'>
                           Name
-                          <span className="text-red-400">&#42;</span>
+                          <span className='text-red-400'>&#42;</span>
                         </FieldLabel>
                         <Input
                           {...field}
-                          id="donor_name"
+                          id='donor_name'
                           type={"text"}
                           aria-invalid={fieldState.invalid}
-                          disabled={form.formState.isSubmitting}
+                          disabled={isSubmitting}
                           tabIndex={1}
                           autoFocus
                         />
@@ -140,20 +154,20 @@ export function CreateDonationDialog() {
                     )}
                   />
                   <Controller
-                    name="donor_email"
-                    control={form.control}
+                    name='donor_email'
+                    control={control}
                     render={({ field, fieldState }) => (
-                      <Field>
-                        <FieldLabel htmlFor="donor_email">
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor='donor_email'>
                           Email
-                          <span className="text-red-400">&#42;</span>
+                          <span className='text-red-400'>&#42;</span>
                         </FieldLabel>
                         <Input
                           {...field}
-                          id="donor_email"
+                          id='donor_email'
                           type={"email"}
                           aria-invalid={fieldState.invalid}
-                          disabled={form.formState.isSubmitting}
+                          disabled={isSubmitting}
                           tabIndex={2}
                         />
                         {fieldState.invalid && (
@@ -163,23 +177,25 @@ export function CreateDonationDialog() {
                     )}
                   />
                   <Controller
-                    name="donor_phone"
-                    control={form.control}
+                    name='donor_phone'
+                    control={control}
                     render={({ field, fieldState }) => (
                       <Field
-                        className="md:col-span-2"
+                        className='md:col-span-2'
                         data-invalid={fieldState.invalid}
                       >
-                        <FieldLabel htmlFor="donor_phone">
+                        <FieldLabel htmlFor='donor_phone'>
                           Phone
-                          <span className="text-red-400">&#42;</span>
+                          <span className='text-red-400'>&#42;</span>
                         </FieldLabel>
                         <Input
                           {...field}
-                          id="donor_phone"
+                          id='donor_phone'
                           type={"tel"}
                           aria-invalid={fieldState.invalid}
-                          disabled={form.formState.isSubmitting}
+                          disabled={isSubmitting}
+                          placeholder='Format: 09XX-XXX-XXXX'
+                          maxLength={11}
                           tabIndex={3}
                         />
                         {fieldState.invalid && (
@@ -189,36 +205,48 @@ export function CreateDonationDialog() {
                     )}
                   />
                   <Controller
-                    name="donor_address"
-                    control={form.control}
+                    name='donor_address_line_1'
+                    control={control}
                     render={({ field, fieldState }) => (
                       <Field
-                        className="md:col-span-2"
+                        className='md:col-span-2'
                         data-invalid={fieldState.invalid}
                       >
-                        <FieldLabel htmlFor="donor_address">
-                          Address
-                          <span className="text-red-400">&#42;</span>
+                        <FieldLabel htmlFor='donor_address_line_1'>
+                          Address Line 1
                         </FieldLabel>
-                        <InputGroup>
-                          <InputGroupTextarea
-                            id="donor_address"
-                            name="donor_address"
-                            rows={3}
-                            maxLength={256}
-                            value={field.value || ""}
-                            onChange={field.onChange}
-                            ref={field.ref}
-                            aria-invalid={fieldState.invalid}
-                            disabled={form.formState.isSubmitting}
-                            tabIndex={4}
-                          />
-                          <InputGroupAddon align={"block-end"}>
-                            <InputGroupText>
-                              {field.value?.length} / 256 characters
-                            </InputGroupText>
-                          </InputGroupAddon>
-                        </InputGroup>
+                        <Input
+                          {...field}
+                          id='donor_address_line_1'
+                          maxLength={256}
+                          aria-invalid={fieldState.invalid}
+                          disabled={isSubmitting}
+                          tabIndex={4}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    name='donor_address_line_2'
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <Field
+                        className='md:col-span-2'
+                        data-invalid={fieldState.invalid}
+                      >
+                        <FieldLabel htmlFor='donor_address_line_2'>
+                          Address Line 2
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          id='donor_address_line_2'
+                          maxLength={256}
+                          aria-invalid={fieldState.invalid}
+                          tabIndex={4}
+                        />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}
@@ -234,22 +262,21 @@ export function CreateDonationDialog() {
                   Please fill in the informations of the donation.
                 </FieldDescription>
                 <FieldGroup>
-                  <div className="grid md:grid-cols-2 gap-7">
+                  <div className='grid gap-7 md:grid-cols-2'>
                     <Controller
-                      name="amount"
-                      control={form.control}
+                      name='amount'
+                      control={control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel htmlFor="amount">
+                          <FieldLabel htmlFor='amount'>
                             Amount
-                            <span className="text-red-400">&#42;</span>
+                            <span className='text-red-400'>&#42;</span>
                           </FieldLabel>
                           <Input
                             {...field}
-                            id="amount"
+                            id='amount'
                             type={"number"}
                             aria-invalid={fieldState.invalid}
-                            disabled={form.formState.isSubmitting}
                             onChange={(e) =>
                               field.onChange(Number(e.target.value))
                             }
@@ -262,13 +289,13 @@ export function CreateDonationDialog() {
                       )}
                     />
                     <Controller
-                      name="payment_method"
-                      control={form.control}
+                      name='payment_method'
+                      control={control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel htmlFor="payment_method">
+                          <FieldLabel htmlFor='payment_method'>
                             Payment Method
-                            <span className="text-red-400">&#42;</span>
+                            <span className='text-red-400'>&#42;</span>
                           </FieldLabel>
                           <Select
                             name={field.name}
@@ -277,10 +304,10 @@ export function CreateDonationDialog() {
                             items={paymentMethods}
                           >
                             <SelectTrigger
-                              id="payment_method"
+                              id='payment_method'
                               aria-invalid={fieldState.invalid}
                             >
-                              <SelectValue placeholder="" />
+                              <SelectValue placeholder='' />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectGroup>
@@ -303,18 +330,18 @@ export function CreateDonationDialog() {
                     />
                   </div>
                   <Controller
-                    name="date_donated"
-                    control={form.control}
+                    name='date_donated'
+                    control={control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="date_donated">
+                        <FieldLabel htmlFor='date_donated'>
                           Date Donated
-                          <span className="text-red-400">&#42;</span>
+                          <span className='text-red-400'>&#42;</span>
                         </FieldLabel>
                         <DatePicker
                           value={field.value}
                           onChange={field.onChange}
-                          placeholder="Set date donated"
+                          placeholder='Set date donated'
                         />
                       </Field>
                     )}
@@ -322,17 +349,17 @@ export function CreateDonationDialog() {
                 </FieldGroup>
               </FieldSet>
               <FieldSeparator />
-              <Field orientation={"horizontal"} className="justify-end">
+              <Field orientation={"horizontal"} className='justify-end'>
                 <Button
                   variant={"outline"}
                   type={"reset"}
-                  form="add-donation-form"
-                  onClick={() => form.reset()}
+                  form='add-donation-form'
+                  onClick={() => reset()}
                 >
                   <IconRestore />
                   Reset
                 </Button>
-                <Button type={"submit"} form="add-donation-form">
+                <Button type={"submit"} form='add-donation-form'>
                   <IconPlus />
                   Add donation
                 </Button>

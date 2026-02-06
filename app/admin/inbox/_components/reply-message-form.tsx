@@ -18,6 +18,7 @@ import { Message } from "@/types/models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconSend } from "@tabler/icons-react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod/v3";
 
 export function ReplyMessageForm({
@@ -41,25 +42,32 @@ export function ReplyMessageForm({
       message: "",
     },
   });
+
+  const onSubmit = (data: FormValues) => {
+    console.log(data);
+    toast.success("(TEST) Reply was sent.");
+    form.reset();
+    setIsOpen(false);
+  };
   return (
-    <form id="reply-message-form">
+    <form id='reply-message-form' onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
         <Field>
           <FieldContent>
-            <FieldLabel htmlFor="subject">Subject</FieldLabel>
+            <FieldLabel htmlFor='subject'>Subject</FieldLabel>
             <FieldDescription>{message.subject}</FieldDescription>
           </FieldContent>
         </Field>
         <Field>
           <FieldContent>
-            <FieldLabel htmlFor="sender_message">Sender Message</FieldLabel>
-            <FieldDescription className="text-pretty">
+            <FieldLabel htmlFor='sender_message'>Sender Message</FieldLabel>
+            <FieldDescription className='text-pretty'>
               {message.message}
             </FieldDescription>
           </FieldContent>
         </Field>
         <Controller
-          name="message"
+          name='message'
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
@@ -80,11 +88,11 @@ export function ReplyMessageForm({
             </Field>
           )}
         />
-        <Field orientation={"horizontal"} className="justify-end">
+        <Field orientation={"horizontal"} className='justify-end'>
           <Button variant={"outline"} onClick={() => setIsOpen(false)}>
             Cancel
           </Button>
-          <Button>
+          <Button type='submit' form='reply-message-form'>
             <IconSend />
             Send
           </Button>

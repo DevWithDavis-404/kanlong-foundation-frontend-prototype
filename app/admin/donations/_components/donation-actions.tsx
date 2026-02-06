@@ -1,5 +1,6 @@
 "use client";
 
+import { ActionDialog } from "@/components/action-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,15 +12,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Donation } from "@/types/models";
-import { IconArchive, IconDotsVertical, IconEye } from "@tabler/icons-react";
+import {
+  IconArchive,
+  IconDotsVertical,
+  IconEdit,
+  IconEye,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
-import { ViewDonationDialog } from "./view-donation-dialog";
-import { ActionDialog } from "@/components/action-dialog";
 import { toast } from "sonner";
+import { EditDonationDialog } from "./edit-donation-dialog";
+import { ViewDonationDialog } from "./view-donation-dialog";
 
 export function DonationActions({ donation }: { donation: Donation }) {
   const [viewOpen, setViewOpen] = useState<boolean>(false);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
   const [archiveOpen, setArchiveOpen] = useState<boolean>(false);
   return (
     <Fragment>
@@ -37,11 +44,16 @@ export function DonationActions({ donation }: { donation: Donation }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setViewOpen(true)}>
               <IconEye />
-              View
+              View donation
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setEditOpen(true)}>
+              <IconEdit />
+              Edit donation
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setArchiveOpen(true)}>
               <IconArchive />
-              Archive
+              Archive donation
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
@@ -52,15 +64,20 @@ export function DonationActions({ donation }: { donation: Donation }) {
         setOpen={setViewOpen}
         donation={donation}
       />
+      <EditDonationDialog
+        donation={donation}
+        open={editOpen}
+        setOpen={setEditOpen}
+      />
       {/* Archive Donation Dialog */}
       <ActionDialog
         open={archiveOpen}
         setOpen={setArchiveOpen}
         size={"sm"}
         title={`Archive Donation ID ${donation.id}?`}
-        description="This action will move the donation to archives. You can restore it back later."
+        description='This action will move the donation to archives. You can restore it back later.'
         icon={IconArchive}
-        action="Archive"
+        action='Archive'
         onAction={() => {
           toast.info(
             `(Test) Donation ID ${donation.id} was moved to the archives.`,

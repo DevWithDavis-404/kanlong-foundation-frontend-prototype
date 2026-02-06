@@ -1,6 +1,25 @@
 "use client";
 
+import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { DataTableColumnToggle } from "@/components/ui/data-table-column-toggle";
+import { DataTableDataExport } from "@/components/ui/data-table-data-export";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { UserInfo } from "@/components/user-info";
 import { Donation } from "@/types/models";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import {
@@ -16,26 +35,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import { DataTableColumnToggle } from "@/components/ui/data-table-column-toggle";
-import { UserInfo } from "@/components/user-info";
 import { DonationActions } from "./donation-actions";
-import { DataTableDataExport } from "@/components/ui/data-table-data-export";
-import { DataTablePagination } from "@/components/ui/data-table-pagination";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export function DonationsDataTable({ data }: { data: Donation[] }) {
   // Columns Definition
@@ -52,14 +52,14 @@ export function DonationsDataTable({ data }: { data: Donation[] }) {
             onCheckedChange={(value) =>
               table.toggleAllPageRowsSelected(!!value)
             }
-            aria-label="Select all"
+            aria-label='Select all'
           />
         ),
         cell: ({ row }) => (
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
+            aria-label='Select row'
           />
         ),
       },
@@ -73,7 +73,7 @@ export function DonationsDataTable({ data }: { data: Donation[] }) {
         id: "donor",
         accessorKey: "donor.name",
         header: ({ column }) => (
-          <DataTableColumnHeader title="Donor" column={column} />
+          <DataTableColumnHeader title='Donor' column={column} />
         ),
         cell: ({ row }) => {
           return <UserInfo user={row.original.donor} />;
@@ -88,22 +88,24 @@ export function DonationsDataTable({ data }: { data: Donation[] }) {
         id: "amount",
         accessorKey: "amount",
         header: ({ column }) => (
-          <DataTableColumnHeader title="Amount" column={column} />
+          <DataTableColumnHeader title='Amount' column={column} />
         ),
       },
       {
         id: "method",
         accessorKey: "payment_method",
         header: ({ column }) => (
-          <DataTableColumnHeader title="Method" column={column} />
+          <DataTableColumnHeader title='Method' column={column} />
         ),
       },
       {
         id: "date donated",
         accessorKey: "date_donated",
         header: ({ column }) => (
-          <DataTableColumnHeader title="Date Donated" column={column} />
+          <DataTableColumnHeader title='Date Donated' column={column} />
         ),
+        cell: ({ row }) =>
+          new Date(row.original.date_donated).toLocaleDateString(),
       },
       {
         id: "actions",
@@ -162,13 +164,13 @@ export function DonationsDataTable({ data }: { data: Donation[] }) {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4">
-        <InputGroup className="max-w-sm">
+      <div className='flex flex-col items-start justify-between gap-4 py-4 md:flex-row md:items-center'>
+        <InputGroup className='max-w-sm'>
           <InputGroupAddon>
             <IconSearch />
           </InputGroupAddon>
           <InputGroupInput
-            placeholder="Search..."
+            placeholder='Search...'
             value={globalFilter}
             onChange={(e) => table.setGlobalFilter(String(e.target.value))}
           />
@@ -184,12 +186,12 @@ export function DonationsDataTable({ data }: { data: Donation[] }) {
             </InputGroupAddon>
           )}
         </InputGroup>
-        <div className="flex items-center gap-4">
-          <DataTableDataExport title="Donations" table={table} />
+        <div className='flex items-center gap-4'>
+          <DataTableDataExport title='Donations' table={table} />
           <DataTableColumnToggle table={table} />
         </div>
       </div>
-      <div className="overflow-hidden rounded-xl border">
+      <div className='overflow-hidden rounded-xl border'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -230,7 +232,7 @@ export function DonationsDataTable({ data }: { data: Donation[] }) {
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className='h-24 text-center'
                 >
                   No results.
                 </TableCell>

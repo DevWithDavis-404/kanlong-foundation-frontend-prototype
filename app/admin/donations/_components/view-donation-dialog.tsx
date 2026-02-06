@@ -29,7 +29,7 @@ export function ViewDonationDialog({
     {
       title: "Donation ID",
       description: donation.id,
-      className: "col-span-2",
+      className: "md:col-span-2",
     },
     {
       title: "Donor Name",
@@ -67,19 +67,21 @@ export function ViewDonationDialog({
           <DialogTitle>View Donation</DialogTitle>
           <DialogDescription>View the informations below.</DialogDescription>
         </DialogHeader>
-        {/*  */}
-        <ItemGroup>
-          <div className="grid md:grid-cols-2 gap-2.5">
-            {donationDetails.map((item) => (
-              <Item key={item.title} className={item.className}>
-                <ItemContent>
-                  <ItemTitle>{item.title}</ItemTitle>
-                  <ItemDescription>{item.description}</ItemDescription>
-                </ItemContent>
-              </Item>
-            ))}
-          </div>
-        </ItemGroup>
+        <div className="no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto">
+          {/*  */}
+          <ItemGroup>
+            <div className="grid md:grid-cols-2 gap-2.5">
+              {donationDetails.map((item) => (
+                <Item key={item.title} className={item.className}>
+                  <ItemContent>
+                    <ItemTitle>{item.title}</ItemTitle>
+                    <ItemDescription>{item.description}</ItemDescription>
+                  </ItemContent>
+                </Item>
+              ))}
+            </div>
+          </ItemGroup>
+        </div>
       </DialogContent>
     </Dialog>
   );

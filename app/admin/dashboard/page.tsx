@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -6,12 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CardItem } from "@/types/global";
-import {
-  IconHeartHandshake,
-  IconUserHeart,
-  IconUsers,
-} from "@tabler/icons-react";
 import {
   Table,
   TableBody,
@@ -20,9 +15,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { donations } from "@/data/donations";
 import { volunteers } from "@/data/volunteers";
+import { CardItem } from "@/types/global";
+import {
+  IconHeartHandshake,
+  IconUserHeart,
+  IconUsers,
+} from "@tabler/icons-react";
 
 const cardItems: CardItem[] = [
   {
@@ -47,8 +47,8 @@ const cardItems: CardItem[] = [
 
 export default function AdminDashboardPage() {
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 md:grid-cols-3">
+    <div className='space-y-4'>
+      <div className='grid gap-4 md:grid-cols-3'>
         {cardItems.map((item) => (
           <Card key={item.label}>
             <CardHeader>
@@ -59,7 +59,7 @@ export default function AdminDashboardPage() {
           </Card>
         ))}
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className='grid gap-4 lg:grid-cols-2'>
         <Card>
           <CardHeader>
             <CardTitle>Recent Donations</CardTitle>
@@ -81,7 +81,9 @@ export default function AdminDashboardPage() {
                     <TableCell>{data.id}</TableCell>
                     <TableCell>{data.donor.name}</TableCell>
                     <TableCell>{data.amount}</TableCell>
-                    <TableCell>{data.date_donated}</TableCell>
+                    <TableCell>
+                      {new Date(data.date_donated).toLocaleDateString()}
+                    </TableCell>
                     <TableCell>
                       <Button>View</Button>
                     </TableCell>

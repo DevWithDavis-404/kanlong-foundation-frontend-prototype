@@ -1,5 +1,6 @@
 "use client";
 
+import { AppLogo } from "@/components/app-logo";
 import {
   Sidebar,
   SidebarContent,
@@ -13,16 +14,18 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { isSameUrl } from "@/lib/utils";
-import { adminNav } from "./sidebar-config";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AppLogo } from "@/components/app-logo";
+import React from "react";
 import { NavUser } from "./nav-user";
+import { adminNav } from "./sidebar-config";
 
-export function AdminSidebar() {
+export function AdminSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   return (
-    <Sidebar collapsible={"icon"}>
+    <Sidebar {...props}>
       {/* Sidebar Header */}
       <SidebarHeader>
         <SidebarMenu>
@@ -32,11 +35,11 @@ export function AdminSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       {/* Sidebar Content */}
-      <SidebarContent className="px-1.5 md:px-0">
+      <SidebarContent className='px-1.5 md:px-0'>
         {adminNav.map((group) => (
           <SidebarGroup key={group.label}>
             <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-            <SidebarGroupContent className="flex flex-col gap-2">
+            <SidebarGroupContent className='flex flex-col gap-2'>
               {group.items.map((item) => (
                 <SidebarMenu key={item.title}>
                   <SidebarMenuItem>
@@ -46,9 +49,10 @@ export function AdminSidebar() {
                     >
                       <Link
                         href={item.url}
-                        className="flex w-full items-center gap-2"
+                        className='flex w-full items-center gap-2'
+                        prefetch
                       >
-                        {item.icon && <item.icon className="size-14" />}
+                        {item.icon && <item.icon className='size-14' />}
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
