@@ -1,4 +1,6 @@
 {
+    "tabWidth": 2,
+    "useTabs": false,
     "semi": true,
     "arrowParens": "always",
     "bracketSpacing": true,
@@ -6,6 +8,5 @@
     "plugins": [
         "prettier-plugin-organize-imports",
         "prettier-plugin-tailwindcss"
-    ],
-    "tabWidth": 2
+    ]
 }

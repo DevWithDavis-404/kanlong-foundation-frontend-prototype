@@ -1,23 +1,28 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
+import { IconExternalLink } from "@tabler/icons-react";
 import Image from "next/image";
+import Link from "next/link";
+import { Fragment } from "react/jsx-runtime";
 
 export default function GuestHomePage() {
   return (
-    <main>
+    <Fragment>
       {/* Hero Section */}
-      <section className='bg-primary/50 flex min-h-svh items-center justify-center p-4'>
+      <section className='flex min-h-svh items-center justify-center'>
         <div className='mx-auto lg:max-w-5xl'>
           <div className='grid items-center gap-6 lg:grid-cols-2 lg:gap-12'>
             <div className='flex flex-col items-center gap-5 text-center lg:items-start lg:text-left'>
-              <h1 className='text-4xl font-bold text-pretty italic'>KANLONG</h1>
+              <h1 className='text-4xl font-bold text-pretty italic'>
+                <q>KANLONG</q>
+              </h1>
               <p className='max-w-xl lg:text-xl'>
                 is a Filipino term for shade, mantle, shelter, refuge or
                 sanctuary We consider every child to be unique and we seek ways
                 to let them shine according to their developing physical,
                 psycho-social and intellectual capacities.
               </p>
-              <div className='flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start'>
+              <div className='flex w-full flex-row justify-center gap-2 lg:justify-start'>
                 <Button variant={"default"}>Button 1</Button>
                 <Button variant={"secondary"}>Button 2</Button>
               </div>
@@ -31,7 +36,7 @@ export default function GuestHomePage() {
         </div>
       </section>
       {/* Section */}
-      <section className='bg-yellow-400/80 px-4 py-32'>
+      <section className='py-32'>
         <div className='mx-auto lg:max-w-5xl'>
           <div className='grid gap-6 text-center'>
             <h2 className='text-2xl font-bold lg:text-4xl'>
@@ -44,50 +49,63 @@ export default function GuestHomePage() {
               “children with special needs” or “children with disabilities.
             </p>
             <div className='place-self-center'>
-              <Button variant={"secondary"}>Button</Button>
+              <Link href={"/about"} className={"flex items-center gap-2"}>
+                <Button variant={"default"} size={"lg"}>
+                  Learn More About Us <IconExternalLink />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
       {/* Section */}
-      <section className='bg-primary/50 px-4 py-32'>
-        <div className='mx-auto space-y-6 text-center lg:max-w-5xl'>
-          <h1 className='text-2xl font-bold lg:text-4xl'>
-            HELP US. HELP THEM.
-          </h1>
-          <div className='grid gap-6 px-10 md:grid-cols-3 md:px-0'>
-            <AspectRatio ratio={1 / 1}>
-              <Image
-                src={"/assets/image1.jpg"}
-                alt='Image 1'
-                fill
-                className='rounded-md object-cover'
-              />
-            </AspectRatio>
-            <AspectRatio ratio={1 / 1}>
-              <Image
-                src={"/assets/image2.jpg"}
-                alt='Image 2'
-                fill
-                className='rounded-md object-cover'
-              />
-            </AspectRatio>
-            <AspectRatio ratio={1 / 1}>
-              <Image
-                src={"/assets/image3.jpg"}
-                alt='Image 3'
-                fill
-                className='rounded-md object-cover'
-              />
-            </AspectRatio>
+      <section className='flex min-h-svh items-center justify-center py-8 md:py-0'>
+        <div className='mx-auto w-full lg:max-w-5xl'>
+          <div className='grid gap-6 px-6 text-center md:grid-cols-3 md:px-0'>
+            <h1 className='text-2xl font-bold md:col-span-3 lg:text-4xl'>
+              HELP US. HELP THEM.
+            </h1>
+            <div className='space-y-4'>
+              <AspectRatio ratio={1 / 1}>
+                <Image
+                  src={"/assets/image1.jpg"}
+                  alt='Image 1'
+                  fill
+                  className='rounded-md object-cover'
+                />
+              </AspectRatio>
+              <h1 className='text-2xl font-bold'>Identify</h1>
+            </div>
+            <div className='space-y-4'>
+              <AspectRatio ratio={1 / 1}>
+                <Image
+                  src={"/assets/image2.jpg"}
+                  alt='Image 2'
+                  fill
+                  className='rounded-md object-cover'
+                />
+              </AspectRatio>
+              <h1 className='text-2xl font-bold'>Locate</h1>
+            </div>
+            <div className='space-y-4'>
+              <AspectRatio ratio={1 / 1}>
+                <Image
+                  src={"/assets/image3.jpg"}
+                  alt='Image 3'
+                  fill
+                  className='rounded-md object-cover'
+                />
+              </AspectRatio>
+              <h1 className='text-2xl font-bold'>Evaluate</h1>
+            </div>
+            <p className='mx-auto max-w-xl italic md:col-span-3'>
+              Early identification and intervention can have a significant
+              impact on a child&apos;s ability to learn new skills, as well as
+              reduce the need for costly interventions over time. - cdc.gov
+            </p>
           </div>
-          <p className='mx-auto max-w-xl'>
-            Early identification and intervention can have a significant impact
-            on a child&apos;s ability to learn new skills, as well as reduce the
-            need for costly interventions over time. - cdc.gov
-          </p>
         </div>
       </section>
-    </main>
+    </Fragment>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { AppLogo } from "@/components/app-logo";
+import { ModeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -22,7 +23,7 @@ import { navItems } from "./navbar-config";
 export function GuestNavbar() {
   return (
     <section className='border-sidebar-border/80 bg-background sticky top-0 z-50 border-b'>
-      <nav className='mx-auto flex h-16 items-center px-4 md:max-w-7xl lg:justify-between'>
+      <nav className='mx-auto flex h-16 items-center px-4 md:max-w-7xl'>
         {/* Mobile Navigation */}
         <div className='lg:hidden'>
           <Sheet>
@@ -35,7 +36,7 @@ export function GuestNavbar() {
             />
             <SheetContent
               side='left'
-              className='bg-sidebar flex h-full w-64 flex-col items-stretch justify-between'
+              className='bg-background dark:bg-sidebar flex h-full w-64 flex-col items-stretch justify-between'
             >
               <SheetTitle className='sr-only'>Navigation Menu</SheetTitle>
               <SheetHeader className='flex justify-start text-left'>
@@ -70,7 +71,7 @@ export function GuestNavbar() {
         </Link>
 
         {/* Navigation */}
-        <div className='ml-6 hidden h-full items-center space-x-6 lg:flex'>
+        <div className='ml-auto hidden items-center space-x-6 lg:flex'>
           <NavigationMenu>
             <NavigationMenuList>
               {navItems.map((item) => (
@@ -82,6 +83,9 @@ export function GuestNavbar() {
               ))}
             </NavigationMenuList>
           </NavigationMenu>
+        </div>
+        <div className='ml-auto'>
+          <ModeToggle />
         </div>
       </nav>
     </section>
