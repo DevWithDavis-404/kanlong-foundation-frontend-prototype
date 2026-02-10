@@ -57,7 +57,7 @@ export function ViewDonationDialog({
     },
     {
       title: "Date Donated",
-      description: donation.date_donated,
+      description: new Date(donation.date_donated).toDateString(),
     },
   ];
   return (
@@ -67,10 +67,10 @@ export function ViewDonationDialog({
           <DialogTitle>View Donation</DialogTitle>
           <DialogDescription>View the informations below.</DialogDescription>
         </DialogHeader>
-        <div className="no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto">
+        <div className='no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto'>
           {/*  */}
           <ItemGroup>
-            <div className="grid md:grid-cols-2 gap-2.5">
+            <div className='grid gap-2.5 md:grid-cols-2'>
               {donationDetails.map((item) => (
                 <Item key={item.title} className={item.className}>
                   <ItemContent>

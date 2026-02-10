@@ -38,12 +38,12 @@ export function NavUser() {
             render={
               <SidebarMenuButton size={"lg"}>
                 <UserInfo user={user} />
-                <IconSelector className="ml-auto" />
+                <IconSelector className='ml-auto' />
               </SidebarMenuButton>
             }
           />
           <DropdownMenuContent
-            className="min-w-60 rounded-lg"
+            className='min-w-60 rounded-lg'
             side={open ? "top" : "right"}
           >
             <DropdownMenuGroup>

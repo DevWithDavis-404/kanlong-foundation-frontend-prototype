@@ -7,8 +7,8 @@ export type User = {
   phone: string;
   status?: string;
   avatar?: string;
-  donor_address_line_1: string;
-  donor_address_line_2: string;
+  donor_address_line_1?: string;
+  donor_address_line_2?: string;
   created_at: string;
 };
 
